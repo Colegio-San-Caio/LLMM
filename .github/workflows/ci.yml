@@ -27,3 +27,6 @@ jobs:
 
       - name: Run LLM
         run: ./LLM README.md 200
+
+      - name: Build and run Tex.m
+        run: clang objc/Tex.m -o Tex && ./Tex && head -20 cover.tex
