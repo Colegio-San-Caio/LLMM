@@ -1,1 +1,15 @@
-...paste...
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "LLMM"
+type: software
+abstract: "LLMM: catalog and 3-frame index, HTML frame-to-iframe macro, Tex.m manuscript and cover generator, ISSN.m check-digit tool, and the fily.img 360K disk image release."
+authors:
+  - family-names: "Ketelhut"
+    given-names: "Kai Olaf"
+    orcid: "https://orcid.org/0000-0001-6049-8873"
+    affiliation: "Fieldberry Group"
+repository-code: "https://github.com/Colegio-San-Caio/LLMM"
+url: "https://colegio-san-caio.github.io/LLMM/"
+doi: 10.5281/zenodo.23401392
+version: "2026.10.17"
+date-released: 2026-10-17
