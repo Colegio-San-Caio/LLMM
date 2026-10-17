@@ -1,23 +1,59 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LLMM - Catalog</title>
+<title>LLMM - LIVE CATALOG - All Content</title>
 <style>
 body{margin:0;background:#0d1117;color:#c9d1d9;font-family:monospace}
-.top{padding:14px 20px;border-bottom:1px solid #30363d;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax:280px,1fr));gap:16px;padding:20px}
+.top{padding:14px 20px;border-bottom:1px solid #30363d;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;background:#0d1117}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;padding:20px}
 .card{border:1px solid #30363d;border-radius:8px;padding:16px;background:#161b22}
 .card h3{margin:0 0 8px;color:#58a6ff}
-.card a{color:#58a6ff;text-decoration:none;word-break:break-all}
-.badge{font-size:12px;background:#0d1117;border:1px solid #30363d;padding:2px 6px;border-radius:4px;margin-right:6px;display:inline-block;margin-bottom:4px}
-.ok{color:#3fb950}
-.qemu{font-size:11px;background:#0d1117;padding:8px;border-radius:4px;margin-top:8px;display:block;overflow-x:auto}
+a{color:#58a6ff;text-decoration:none;word-break:break-all}
+.badge{font-size:11px;background:#0d1117;border:1px solid #30363d;padding:2px 6px;border-radius:4px;margin-right:4px;display:inline-block;margin-bottom:4px}
+.ok{color:#3fb950;border-color:#3fb950}
+table{width:100%;font-size:12px;border-collapse:collapse;margin-top:8px}
+td{padding:4px 0;border-bottom:1px solid #21262d;word-break:break-all}
+.qemu{background:#010409;padding:10px;border-radius:6px;margin-top:10px;font-size:12px;display:block;overflow-x:auto;border:1px solid #30363d}
+.live{border-color:#58a6ff}
 </style></head><body>
-<div class="top"><div><span class="badge ok">● LIVE</span> Colegio-San-Caio/LLMM - CATALOG</div><div><a href="https://github.com/Colegio-San-Caio/LLMM">GitHub LLMM</a> | <a href="https://colegio-san-caio.github.io/demo-repository/">demo-repository</a></div></div>
+<div class="top"><div><span class="badge ok">● LIVE CATALOG v3</span> Colegio-San-Caio / LLMM + demo-repository</div><div><a href="https://github.com/Colegio-San-Caio/LLMM">LLMM</a> | <a href="https://github.com/Colegio-San-Caio/demo-repository">demo-repo</a></div></div>
+
 <div class="grid">
-<div class="card"><h3>iframe.frame.html</h3><div><span class="badge">macro</span><span class="badge ok">public</span></div><p>Standalone evaluation macro - iframe wrapper</p><p><a href="./iframe.frame.html">Open → iframe.frame.html</a></p><code>872e56e</code></div>
-<div class="card"><h3>LLMM Immutable</h3><div><span class="badge">core</span><span class="badge ok">v1.0.0-immutable</span></div><p>Immutable template base</p><p><a href="./index.html">Reload catalog</a></p></div>
-<div class="card"><h3>Mirrors</h3><div><span class="badge">personal</span></div><p><a href="https://clevjhon.github.io/LLMM/">clevjhon.github.io/LLMM/</a><br><a href="https://clevjhon.github.io/LLMM/iframe.frame.html">→ iframe.frame.html</a></p></div>
-<div class="card" style="border-color:#58a6ff"><h3>🧪 oeneyeOS - Floppy Max 2.88MB + VHD</h3><div><span class="badge ok">● LIVE 18:38:53</span><span class="badge">QEMU</span></div><p>A: oeneyeOS.img (2.88M) | B: data.img | C: date.img<br>D: GNUoeneyeALPINEunix.img (357MB)<br>X: workshop.img (1.4MB) + fily.img (360KB)</p><p><a href="https://colegio-san-caio.github.io/demo-repository/">→ Open demo-repository/index.html</a></p><span class="qemu">qemu-system-i386 -fda oeneyeOS.img -fdb data.img -hda date.img</span></div>
+
+<div class="card">
+<h3>iframe.frame.html</h3><span class="badge">macro</span><span class="badge ok">public</span>
+<p>Standalone evaluation macro - iframe wrapper</p>
+<p><a href="./iframe.frame.html">→ Open ./iframe.frame.html</a></p>
+<p><a href="https://clevjhon.github.io/LLMM/iframe.frame.html">→ Mirror clevjhon</a></p>
+<code>2416e6c</code>
 </div>
-<script>fetch('https://api.github.com/repos/Colegio-San-Caio/LLMM/commits/main').then(r=>r.json()).then(d=>{document.body.insertAdjacentHTML('beforeend','<div style="padding:10px 20px;color:#8b949e;font-size:12px">main @ '+d.sha.slice(0,7)+' - '+new Date().toISOString()+'</div>')})</script>
+
+<div class="card live">
+<h3>🧪 oeneyeOS - Floppy Max 2.88MB + VHD - LIVE</h3><span class="badge ok">● LIVE 18:38:53</span><span class="badge">QEMU i386</span>
+<p>Source: <a href="https://colegio-san-caio.github.io/demo-repository/">colegio-san-caio.github.io/demo-repository/</a></p>
+<table>
+<tr><td><b>A: oeneyeOS.img</b> - 2.88M Floppy Max</td><td><a href="https://colegio-san-caio.github.io/demo-repository/oeneyeOS.img">dl</a></td></tr>
+<tr><td><b>B: data.img</b> - Data Drive</td><td><a href="https://colegio-san-caio.github.io/demo-repository/data.img">dl</a></td></tr>
+<tr><td><b>C: date.img</b> - Date Drive</td><td><a href="https://colegio-san-caio.github.io/demo-repository/date.img">dl</a></td></tr>
+<tr><td><b>D: GNUoeneyeALPINEunix.img</b> - 357 MB Alpine<br><span style="font-size:10px;color:#8b949e">a91847b...</span></td><td><a href="https://colegio-san-caio.github.io/demo-repository/GNUoeneyeALPINEunix.img">dl</a></td></tr>
+<tr><td><b>X: workshop.img</b> - 1.4 MB<br><span style="font-size:10px">8653aa...</span></td><td><a href="https://colegio-san-caio.github.io/demo-repository/workshop.img">dl</a></td></tr>
+<tr><td><b>fily.img</b> - 360 KB<br><span style="font-size:10px">00accd...</span></td><td><a href="https://colegio-san-caio.github.io/demo-repository/fily.img">dl</a></td></tr>
+</table>
+<span class="qemu">qemu-system-i386 -fda oeneyeOS.img -fdb data.img -hda date.img -hdb GNUoeneyeALPINEunix.img</span>
+<span class="qemu">qemu-system-i386 -fda oeneyeOS.img -fdb data.img -hda date.img<br># + mount workshop / fily</span>
+</div>
+
+<div class="card">
+<h3>All Mirrors</h3>
+<span class="badge">live</span>
+<p><a href="https://colegio-san-caio.github.io/LLMM/">colegio-san-caio.github.io/LLMM/</a></p>
+<p><a href="https://clevjhon.github.io/LLMM/">clevjhon.github.io/LLMM/</a></p>
+<p><a href="https://colegio-san-caio.github.io/demo-repository/index.html">demo-repository/index.html - oeneyeOS lab</a></p>
+</div>
+
+</div>
+<script>
+fetch('https://api.github.com/repos/Colegio-San-Caio/LLMM/commits/main').then(r=>r.json()).then(d=>{
+ document.body.insertAdjacentHTML('beforeend','<div style="padding:10px 20px;color:#8b949e;font-size:12px">LLMM main @ '+d.sha.slice(0,7)+' - '+new Date().toISOString()+'</div>')
+});
+</script>
 </body></html>
