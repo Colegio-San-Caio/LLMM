@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>iframe.frame - Evaluation Macro</title>
+<style>
+body{background:#0d1117;color:#c9d1d9;font-family:monospace;max-width:900px;margin:0 auto;padding:20px}
+a{color:#58a6ff} textarea{width:100%;height:160px;background:#161b22;color:#c9d1d9;border:1px solid #30363d;border-radius:8px;padding:12px;font-family:monospace}
+button{padding:12px 20px;background:#238636;color:#fff;border:0;border-radius:6px;font-weight:bold;cursor:pointer;margin:10px 0}
+pre{background:#161b22;padding:12px;border-radius:8px;border:1px solid #30363d;overflow:auto}
+.box{border:1px solid #30363d;padding:16px;border-radius:8px;margin:16px 0;background:#010409}
+.ok{color:#3fb950} iframe{border:1px solid #30363d;border-radius:8px;background:#fff;width:100%;height:200px}
+</style></head><body>
+<h1>iframe.frame - Evaluation Macro</h1>
+<div class="box"><span class="ok">● LLMM HTML Macro</span> | Converts deprecated &lt;frame&gt; → modern &lt;iframe&gt; | Like R.go but for HTML<br>
+Org: enforced_repositories=all | SHA: 3ca39d44 | <a href="./">← back to index.html</a></div>
+
+<label><b>1. Paste OLD HTML with &lt;frameset&gt;&lt;frame&gt;:</b></label>
+<textarea id="old"><html>
+<frameset rows="20%,80%">
+  <frame src="header.html" name="top">
+  <frame src="body.html" name="main">
+</frameset>
+</html></textarea>
+<button onclick="run()">▶ EVALUATE → Convert to iframe</button>
+
+<label><b>2. NEW HTML (iframe):</b></label>
+<textarea id="new" readonly style="color:#3fb950;border-color:#3fb950"></textarea>
+
+<b>3. Live Preview (what iframe.frame does):</b>
+<div id="preview" style="display:flex;gap:10px">
+<iframe id="f1" srcdoc="<div style='padding:20px'>header.html - top frame</div>"></iframe>
+<iframe id="f2" srcdoc="<div style='padding:20px'>body.html - main frame<br>Now inside modern iframe</div>"></iframe>
+</div>
+
+<div class="box">
+<b>Macro Logic - iframe.frame evaluation:</b>
+<pre>INPUT:  &lt;frame src="X"&gt;  (HTML 3.2 - deprecated 1999)
+        &lt;frameset cols="25%,75%"&gt;
+
+OUTPUT: &lt;div style="display:flex"&gt;
+          &lt;iframe src="X" style="flex:1"&gt;&lt;/iframe&gt;
+        &lt;/div&gt;
+
+JS ACCESS:
+  OLD: window.frames['main']  or  frame.iframe (WRONG)
+  NEW: document.getElementById('myIframe').contentWindow
+       or window.frames[0] or iframe.contentDocument
+
+EVAL: frame → iframe
+      frameset → div + flex
+      noresize, frameborder → CSS border:0
+</pre>
+<code id="log"></code>
+</div>
+
+<script>
+function run(){
+  const old = document.getElementById('old').value;
+  const srcs = [...old.matchAll(/<frame[^>]*src=["']([^"']+)["'][^>]*>/gi)].map(m=>m[1]);
+  const list = srcs.length ? srcs : ['header.html','body.html'];
+  let out = '<!-- iframe.frame macro output - 3ca39d44 -->
+<div style="display:flex;flex-direction:column;height:100vh">
+';
+  // detect rows vs cols
+  const isRows = /rows=/i.test(old);
+  out += `  <div style="display:flex;flex:1;flex-direction:${isRows?'column':'row'}">
+`;
+  list.forEach(s=>{
+    out += `    <iframe src="${s}" style="flex:1;border:1px solid #30363d" title="${s}" loading="lazy"></iframe>
+`;
+  });
+  out += '  </div>
+</div>';
+  document.getElementById('new').value = out;
+  
+  // update preview
+  document.getElementById('preview').innerHTML = list.map(s=>`<iframe srcdoc="<div style='font-family:monospace;padding:20px'><b>${s}</b><br>converted to iframe<br>src='${s}'<br><br>OK immutable: 3ca39d44</div>" style="flex:1"></iframe>`).join('');
+  
+  const log = `evaluated ${srcs.length} frame(s) → ${list.length} iframe(s) | ${new Date().toLocaleTimeString()} | enforced=true`;
+  document.getElementById('log').textContent = log;
+  console.log('iframe.frame', {input: srcs, output: list, macro: 'frame->iframe'});
+}
+run();
+</script>
+</body></html>
