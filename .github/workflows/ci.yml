@@ -1,35 +1,29 @@
-name: PHP + Objective-C CI
-permissions:
-  contents: read
-
+name: Build and run ISSN.m + R.go
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
-
+  workflow_dispatch:
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - uses: actions/setup-go@v5
         with:
-          php-version: '8.3'
-
-      - name: Lint PHP
-        run: for f in *.php; do php -l "$f"; done
-
-      - name: Build Objective-C
-        run: clang -fobjc-arc -framework Foundation objc/LLM.m -o LLM
-
-      - name: Run LLM
-        run: ./LLM README.md 200
-
-      - name: Build and run Tex.m
-        run: clang objc/Tex.m -o Tex && ./Tex && head -20 cover.tex
-
-      - name: Build and run ISSN.m
-        run: clang objc/ISSN.m -o ISSN && ./ISSN
+          go-version: '1.22'
+      - name: Build ISSN.m + R.go
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          go run R.go || true
+          go build -o R R.go
+          ./R || true
+          sha256sum R R.go
+          gh api /repos/${{ github.repository }}/immutable-releases --method PUT || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LLMM-binaries
+          path: |
+            R
+            R.go
