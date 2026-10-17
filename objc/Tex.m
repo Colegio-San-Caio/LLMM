@@ -39,7 +39,7 @@ static void preamble(FILE *f, int needpdf) {
   fprintf(f, "\\documentclass[a4paper,oneside]{report}\n\\usepackage[margin=25mm]{geometry}\n"
              "\\usepackage{amsmath,amssymb}\n\\usepackage{graphicx}\n\\usepackage{tikz}\n");
   if (needpdf) fprintf(f, "\\usepackage{pdfpages}\n");
-  fprintf(f, "\\usepackage[hidelinks]{hyperref}\n\\begin{document}\n");
+  fprintf(f, "\\usepackage[hidelinks]{hyperref}\n\\InputIfFileExists{macros.tex}{}{}\n\\begin{document}\n");
 }
 
 static void title_page(FILE *f, const char *title, const char *isbn, const char *doi, const char *date) {
