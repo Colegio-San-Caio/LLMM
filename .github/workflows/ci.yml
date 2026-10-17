@@ -30,3 +30,6 @@ jobs:
 
       - name: Build and run Tex.m
         run: clang objc/Tex.m -o Tex && ./Tex && head -20 cover.tex
+
+      - name: Build and run ISSN.m
+        run: clang objc/ISSN.m -o ISSN && ./ISSN
