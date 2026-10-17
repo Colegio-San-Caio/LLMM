@@ -1,0 +1,2 @@
+curl -L -o OQM_file.bin https://raw.githubusercontent.com/clevjhon/MOSFETQ/main/OQM_file.bin
+sha256sum OQM_file.bin
