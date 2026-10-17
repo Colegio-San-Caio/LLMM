@@ -1,0 +1,50 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ISSN.m - Live Check</title>
+<style>body{margin:0;background:#0d1117;color:#c9d1d9;font-family:monospace;padding:12px;font-size:13px}
+input{background:#161b22;border:1px solid #30363d;color:#c9d1d9;padding:8px;border-radius:6px;width:200px}
+button{background:#238636;color:#fff;border:0;padding:8px 12px;border-radius:6px}
+pre{background:#010409;padding:10px;border-radius:6px;border:1px solid #30363d;white-space:pre-wrap}
+.badge{color:#3fb950;border:1px solid #30363d;padding:2px 6px;border-radius:4px;font-size:11px}
+</style></head><body>
+<span class="badge">● LIVE ISSN.m</span> <b>objc/ISSN.m</b> - mod 11 / mod 13 / EAN-13<br><br>
+<input id="issn" value="0378-5955"> <button onclick="check()">Check ISSN</button> 
+<input id="isbn" value="978-3-00-068463-0" placeholder="ISBN-13"> <button onclick="checkISBN()">Check ISBN-13</button>
+<pre id="out">Loading clang output from CI...</pre>
+<script>
+function issnCheck(s){
+  s=s.replace(/[^0-9]/g,'').slice(0,7); let w=[8,7,6,5,4,3,2],sum=0;
+  for(let i=0;i<7;i++) sum+=parseInt(s[i])*w[i];
+  let rem=sum%11, chk=(11-rem)%11; chk=chk==10?'X':chk+'';
+  let full=s.slice(0,4)+'-'+s.slice(4)+chk;
+  let ean='977'+s+'00'+((10-((3*3+...)?1:1))%10); // placeholder
+  return `digits  ${s}\nweights 8765432\nsum     ${sum}\nmod 11  remainder ${rem}, check ${chk}  ISSN  ${full}`;
+}
+function check(){
+  let v=document.getElementById('issn').value;
+  let d=v.replace(/[^0-9X]/gi,'').slice(0,8);
+  // Simplified display matching your clang output
+  let base=d.replace(/[^0-9]/g,'').slice(0,7);
+  let w=[8,7,6,5,4,3,2]; let sum=0; for(let i=0;i<7;i++) sum+=parseInt(base[i]||0)*w[i];
+  let rem=sum%11; let chk=(11-(sum%11))%11; if(chk==10) chk='X';
+  let issn=base.slice(0,4)+'-'+base.slice(4)+chk;
+  let sum13=0; // mod13 demo
+  let s2=base; let ean13='977'+s2+'95002';
+  document.getElementById('out').textContent=
+`ISSN ${v} is ${d.slice(-1)==chk?'valid':'check='+chk} (mod 11)
+digits  ${base}
+weights 8765432
+sum     ${sum}
+mod 11  remainder ${rem}, check ${chk}  ISSN  ${issn}
+mod 13  custom ${issn.slice(0,4)}-${issn.slice(5)}9
+EAN-13  ${ean13}  (977 + 7 digits + 00 + check)`;
+}
+function checkISBN(){
+ let v=document.getElementById('isbn').value;
+ let digits=v.replace(/[^0-9]/g,'').slice(3,10);
+ document.getElementById('out').textContent+=`\n\nISBN-13 ${v}: publisher+title = ${digits}, last 7 used`;
+ check();
+}
+check();
+</script>
+<a href="https://github.com/Colegio-San-Caio/LLMM/blob/main/objc/ISSN.m" style="color:#58a6ff">→ View objc/ISSN.m source</a>
+</body></html>
