@@ -1,184 +1,21 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LLMM - Immutable Template</title>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LLMM - Catalog</title>
 <style>
 body{margin:0;background:#0d1117;color:#c9d1d9;font-family:monospace}
-.top{padding:14px 20px;border-bottom:1px solid #30363d;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.box{padding:12px}
-.frames{display:flex;height:calc(100vh - 68px)}
-.frames iframe{flex:1;border:0;border-right:1px solid #30363d;background:#fff}
-a{color:#58a6ff;text-decoration:none}
-code{background:#161b22;padding:2px 6px;border-radius:4px;border:1px solid #30363d}
-.badge{margin-right:6px}
+.top{padding:14px 20px;border-bottom:1px solid #30363d;display:flex;justify-content:space-between;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;padding:20px}
+.card{border:1px solid #30363d;border-radius:8px;padding:16px;background:#161b22}
+.card h3{margin:0 0 8px;color:#58a6ff}
+.card a{color:#58a6ff;text-decoration:none}
+.badge{font-size:12px;background:#161b22;border:1px solid #30363d;padding:2px 6px;border-radius:4px;margin-right:6px}
 .ok{color:#3fb950}
-</style>
-</head>
-<body>
-<div class="top">
-<b>LLMM - Colegio-San-Caio / clevjhon</b>
-<img class="badge" src="https://github.com/Colegio-San-Caio/LLMM/actions/workflows/ci.yml/badge.svg">
-<img class="badge" src="https://github.com/clevjhon/LLMM/actions/workflows/ci.yml/badge.svg">
-<img class="badge" src="https://img.shields.io/badge/immutable--releases-enabled-3fb950?style=flat&logo=github">
-<span class="ok">● 3ca39d44</span>
+</style></head><body>
+<div class="top"><div><span class="badge ok">● LIVE</span> Colegio-San-Caio/LLMM - CATALOG</div><div><a href="https://github.com/Colegio-San-Caio/LLMM">GitHub</a></div></div>
+<div class="grid">
+<div class="card"><h3>iframe.frame.html</h3><div><span class="badge">macro</span><span class="badge ok">public</span></div><p>Standalone evaluation macro - iframe wrapper</p><p><a href="./iframe.frame.html">Open → iframe.frame.html</a></p><code>88d8b08</code></div>
+<div class="card"><h3>LLMM Immutable</h3><div><span class="badge">core</span><span class="badge ok">v1.0.0-immutable</span></div><p>Immutable template base</p><p><a href="./index.html">Reload catalog</a></p></div>
+<div class="card"><h3>Mirrors</h3><div><span class="badge">personal</span></div><p><a href="https://clevjhon.github.io/LLMM/">clevjhon.github.io/LLMM/</a><br><a href="https://clevjhon.github.io/LLMM/iframe.frame.html">→ iframe.frame.html</a></p></div>
 </div>
-
-<div class="frames">
-<iframe srcdoc="<html><body style='font-family:monospace;padding:20px;background:#0d1117;color:#c9d1d9'><h3>Colegio-San-Caio/LLMM</h3><p><span style='color:#3fb950'>● Immutable Enforced: {&quot;enabled&quot;:true,&quot;enforced_by_owner&quot;:true}</span></p><p><a href='https://github.com/Colegio-San-Caio/LLMM/releases/tag/v1.0.0-immutable' target='_blank'>v1.0.0-immutable</a></p><pre style='background:#161b22;padding:12px;border-radius:8px;border:1px solid #30363d;overflow:auto'>3ca39d448e5b2fdfda02a0fe49b93df3742c760d84a4748c24f1b164b78  R
-e515107b30041c875272be8608a08a82a89ba23fde40f483c9136ee177e467e  R.go</pre><p>gh attestation verify R --repo Colegio-San-Caio/LLMM</p>
-<div id="iframe-frame" style="padding:20px;background:#010409;border-top:2px solid #3fb950">
-<h2>🧪 Evaluation Macro: iframe.frame - Convert frame → iframe</h2>
-<p>Type old &lt;frame&gt; code, get modern &lt;iframe&gt; + live preview. This is your R.go style macro for HTML.</p>
-<div style="display:flex;gap:12px;flex-wrap:wrap">
-<div style="flex:1;min-width:300px">
-<b>OLD (frame - deprecated 1999):</b>
-<textarea id="old" style="width:100%;height:140px;background:#161b22;color:#c9d1d9;border:1px solid #30363d;border-radius:8px;padding:10px;font-family:monospace"><frameset cols="25%,75%">
-  <frame src="menu.html">
-  <frame src="content.html">
-</frameset></textarea>
-<button onclick="convert()" style="margin-top:10px;padding:10px 18px;background:#238636;color:#fff;border:0;border-radius:6px;font-weight:bold;cursor:pointer">Convert → iframe</button>
-</div>
-<div style="flex:1;min-width:300px">
-<b>NEW (iframe - modern):</b>
-<textarea id="new" style="width:100%;height:140px;background:#0d1117;color:#3fb950;border:1px solid #3fb950;border-radius:8px;padding:10px;font-family:monospace" readonly></textarea>
-<div style="margin-top:8px;font-size:12px;color:#8b949e">Live preview:</div>
-<div id="preview" style="border:1px solid #30363d;border-radius:8px;height:120px;background:#fff;overflow:hidden"></div>
-</div>
-</div>
-<script>
-function convert(){
-  let old=document.getElementById('old').value;
-  // simple macro: frame src -> iframe src
-  let frames = [...old.matchAll(/<frame[^>]*src=["']([^"']+)["'][^>]*>/gi)].map(m=>m[1]);
-  if(frames.length==0) frames = ['menu.html','content.html'];
-  let out = `<div style="display:flex;height:200px">
-`;
-  frames.forEach(src=>{
-    out+=`  <iframe src="${src}" style="flex:1;border:1px solid #30363d" title="${src}"></iframe>
-`;
-  });
-  out+=`</div>`;
-  // srcdoc demo - show how it would look
-  let previewHtml = `<div style="display:flex;height:100%"><div style="flex:1;background:#f6f8fa;padding:10px;border-right:1px solid #ccc">${frames[0]}</div><div style="flex:3;padding:10px">${frames[1]||'content'}</div></div>`;
-  document.getElementById('new').value = out;
-  document.getElementById('preview').innerHTML = previewHtml;
-  // evaluation log like R.go
-  console.log('iframe.frame macro:', {from: 'frame', to: 'iframe', count: frames.length, sha: '3ca39d44'});
-}
-convert();
-</script>
-<div style="margin-top:12px;padding:10px;background:#161b22;border:1px solid #30363d;border-radius:6px">
-<b>Evaluation:</b> <code>frame</code> → <code>iframe</code> | <code>frameset</code> → <code>div + flex + iframe</code> | <code>frame.iframe = undefined</code> → <code>document.getElementById('x').contentWindow</code><br>
-This box is itself <code>iframe.frame</code> - an evaluation macro for user HTML pages.
-</div>
-</div>
-
-<div style="position:fixed;bottom:10px;right:10px;background:#238636;padding:10px 14px;border-radius:20px"><a href="iframe.frame.html" style="color:#fff;text-decoration:none;font-weight:bold">→ iframe.frame.html</a></div>
-</body></html>"></iframe>
-
-<iframe srcdoc="<html><body style='font-family:monospace;padding:20px;background:#0d1117;color:#c9d1d9'><h3>clevjhon/LLMM</h3><p><span style='color:#3fb950'>● Immutable Enforced: {&quot;enabled&quot;:true}</span></p><p><a href='https://github.com/clevjhon/LLMM/releases/tag/v1.0.0-immutable' target='_blank'>v1.0.0-immutable</a></p><pre style='background:#161b22;padding:12px;border-radius:8px;border:1px solid #30363d;overflow:auto'>Created at 11:12 AM via Termux
-92 objects pushed
-Build and run ISSN.m + R.go - 13 runs</pre><p>Org template: enforced_repositories=all</p>
-<div id="iframe-frame" style="padding:20px;background:#010409;border-top:2px solid #3fb950">
-<h2>🧪 Evaluation Macro: iframe.frame - Convert frame → iframe</h2>
-<p>Type old &lt;frame&gt; code, get modern &lt;iframe&gt; + live preview. This is your R.go style macro for HTML.</p>
-<div style="display:flex;gap:12px;flex-wrap:wrap">
-<div style="flex:1;min-width:300px">
-<b>OLD (frame - deprecated 1999):</b>
-<textarea id="old" style="width:100%;height:140px;background:#161b22;color:#c9d1d9;border:1px solid #30363d;border-radius:8px;padding:10px;font-family:monospace"><frameset cols="25%,75%">
-  <frame src="menu.html">
-  <frame src="content.html">
-</frameset></textarea>
-<button onclick="convert()" style="margin-top:10px;padding:10px 18px;background:#238636;color:#fff;border:0;border-radius:6px;font-weight:bold;cursor:pointer">Convert → iframe</button>
-</div>
-<div style="flex:1;min-width:300px">
-<b>NEW (iframe - modern):</b>
-<textarea id="new" style="width:100%;height:140px;background:#0d1117;color:#3fb950;border:1px solid #3fb950;border-radius:8px;padding:10px;font-family:monospace" readonly></textarea>
-<div style="margin-top:8px;font-size:12px;color:#8b949e">Live preview:</div>
-<div id="preview" style="border:1px solid #30363d;border-radius:8px;height:120px;background:#fff;overflow:hidden"></div>
-</div>
-</div>
-<script>
-function convert(){
-  let old=document.getElementById('old').value;
-  // simple macro: frame src -> iframe src
-  let frames = [...old.matchAll(/<frame[^>]*src=["']([^"']+)["'][^>]*>/gi)].map(m=>m[1]);
-  if(frames.length==0) frames = ['menu.html','content.html'];
-  let out = `<div style="display:flex;height:200px">
-`;
-  frames.forEach(src=>{
-    out+=`  <iframe src="${src}" style="flex:1;border:1px solid #30363d" title="${src}"></iframe>
-`;
-  });
-  out+=`</div>`;
-  // srcdoc demo - show how it would look
-  let previewHtml = `<div style="display:flex;height:100%"><div style="flex:1;background:#f6f8fa;padding:10px;border-right:1px solid #ccc">${frames[0]}</div><div style="flex:3;padding:10px">${frames[1]||'content'}</div></div>`;
-  document.getElementById('new').value = out;
-  document.getElementById('preview').innerHTML = previewHtml;
-  // evaluation log like R.go
-  console.log('iframe.frame macro:', {from: 'frame', to: 'iframe', count: frames.length, sha: '3ca39d44'});
-}
-convert();
-</script>
-<div style="margin-top:12px;padding:10px;background:#161b22;border:1px solid #30363d;border-radius:6px">
-<b>Evaluation:</b> <code>frame</code> → <code>iframe</code> | <code>frameset</code> → <code>div + flex + iframe</code> | <code>frame.iframe = undefined</code> → <code>document.getElementById('x').contentWindow</code><br>
-This box is itself <code>iframe.frame</code> - an evaluation macro for user HTML pages.
-</div>
-</div>
-
-<div style="position:fixed;bottom:10px;right:10px;background:#238636;padding:10px 14px;border-radius:20px"><a href="iframe.frame.html" style="color:#fff;text-decoration:none;font-weight:bold">→ iframe.frame.html</a></div>
-</body></html>"></iframe>
-</div>
-
-<div id="iframe-frame" style="padding:20px;background:#010409;border-top:2px solid #3fb950">
-<h2>🧪 Evaluation Macro: iframe.frame - Convert frame → iframe</h2>
-<p>Type old &lt;frame&gt; code, get modern &lt;iframe&gt; + live preview. This is your R.go style macro for HTML.</p>
-<div style="display:flex;gap:12px;flex-wrap:wrap">
-<div style="flex:1;min-width:300px">
-<b>OLD (frame - deprecated 1999):</b>
-<textarea id="old" style="width:100%;height:140px;background:#161b22;color:#c9d1d9;border:1px solid #30363d;border-radius:8px;padding:10px;font-family:monospace"><frameset cols="25%,75%">
-  <frame src="menu.html">
-  <frame src="content.html">
-</frameset></textarea>
-<button onclick="convert()" style="margin-top:10px;padding:10px 18px;background:#238636;color:#fff;border:0;border-radius:6px;font-weight:bold;cursor:pointer">Convert → iframe</button>
-</div>
-<div style="flex:1;min-width:300px">
-<b>NEW (iframe - modern):</b>
-<textarea id="new" style="width:100%;height:140px;background:#0d1117;color:#3fb950;border:1px solid #3fb950;border-radius:8px;padding:10px;font-family:monospace" readonly></textarea>
-<div style="margin-top:8px;font-size:12px;color:#8b949e">Live preview:</div>
-<div id="preview" style="border:1px solid #30363d;border-radius:8px;height:120px;background:#fff;overflow:hidden"></div>
-</div>
-</div>
-<script>
-function convert(){
-  let old=document.getElementById('old').value;
-  // simple macro: frame src -> iframe src
-  let frames = [...old.matchAll(/<frame[^>]*src=["']([^"']+)["'][^>]*>/gi)].map(m=>m[1]);
-  if(frames.length==0) frames = ['menu.html','content.html'];
-  let out = `<div style="display:flex;height:200px">
-`;
-  frames.forEach(src=>{
-    out+=`  <iframe src="${src}" style="flex:1;border:1px solid #30363d" title="${src}"></iframe>
-`;
-  });
-  out+=`</div>`;
-  // srcdoc demo - show how it would look
-  let previewHtml = `<div style="display:flex;height:100%"><div style="flex:1;background:#f6f8fa;padding:10px;border-right:1px solid #ccc">${frames[0]}</div><div style="flex:3;padding:10px">${frames[1]||'content'}</div></div>`;
-  document.getElementById('new').value = out;
-  document.getElementById('preview').innerHTML = previewHtml;
-  // evaluation log like R.go
-  console.log('iframe.frame macro:', {from: 'frame', to: 'iframe', count: frames.length, sha: '3ca39d44'});
-}
-convert();
-</script>
-<div style="margin-top:12px;padding:10px;background:#161b22;border:1px solid #30363d;border-radius:6px">
-<b>Evaluation:</b> <code>frame</code> → <code>iframe</code> | <code>frameset</code> → <code>div + flex + iframe</code> | <code>frame.iframe = undefined</code> → <code>document.getElementById('x').contentWindow</code><br>
-This box is itself <code>iframe.frame</code> - an evaluation macro for user HTML pages.
-</div>
-</div>
-
-<div style="position:fixed;bottom:10px;right:10px;background:#238636;padding:10px 14px;border-radius:20px"><a href="iframe.frame.html" style="color:#fff;text-decoration:none;font-weight:bold">→ iframe.frame.html</a></div>
-</body>
-</html>
+<script>fetch('https://api.github.com/repos/Colegio-San-Caio/LLMM/commits/main').then(r=>r.json()).then(d=>{document.body.insertAdjacentHTML('beforeend','<div style="padding:10px 20px;color:#8b949e;font-size:12px">main @ '+d.sha.slice(0,7)+' - '+new Date().toISOString()+'</div>')})</script>
+</body></html>
