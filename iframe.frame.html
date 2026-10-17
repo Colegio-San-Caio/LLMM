@@ -1,84 +1,134 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>iframe.frame - Evaluation Macro</title>
 <style>
-body{background:#0d1117;color:#c9d1d9;font-family:monospace;max-width:900px;margin:0 auto;padding:20px}
-a{color:#58a6ff} textarea{width:100%;height:160px;background:#161b22;color:#c9d1d9;border:1px solid #30363d;border-radius:8px;padding:12px;font-family:monospace}
-button{padding:12px 20px;background:#238636;color:#fff;border:0;border-radius:6px;font-weight:bold;cursor:pointer;margin:10px 0}
-pre{background:#161b22;padding:12px;border-radius:8px;border:1px solid #30363d;overflow:auto}
-.box{border:1px solid #30363d;padding:16px;border-radius:8px;margin:16px 0;background:#010409}
-.ok{color:#3fb950} iframe{border:1px solid #30363d;border-radius:8px;background:#fff;width:100%;height:200px}
-</style></head><body>
+  body { background:#0d1117; color:#c9d1d9; font-family:ui-monospace,Menlo,Consolas,monospace; margin:0; padding:16px; }
+  h1 { font-size:2rem; margin:24px 0 16px; }
+  .box { background:#010409; border:1px solid #30363d; border-radius:10px; padding:14px 16px; line-height:1.5; }
+  .ok { color:#3fb950; }
+  a { color:#58a6ff; }
+  label { display:block; margin:22px 0 8px; font-size:1.05rem; }
+  textarea { width:100%; box-sizing:border-box; min-height:200px; background:#161b22; color:#c9d1d9; border:1px solid #30363d; border-radius:10px; padding:12px; font:inherit; font-size:0.95rem; }
+  #out { border-color:#3fb950; }
+  .row { display:flex; gap:10px; align-items:center; margin:16px 0; flex-wrap:wrap; }
+  button { background:#238636; color:#fff; border:0; border-radius:8px; padding:14px 18px; font:inherit; font-weight:700; }
+  button.alt { background:#30363d; }
+  #status { color:#8b949e; font-size:0.9rem; }
+</style>
+</head>
+<body>
 <h1>iframe.frame - Evaluation Macro</h1>
-<div class="box"><span class="ok">● LLMM HTML Macro</span> | Converts deprecated &lt;frame&gt; → modern &lt;iframe&gt; | Like R.go but for HTML<br>
-Org: enforced_repositories=all | SHA: 3ca39d44 | <a href="./">← back to index.html</a></div>
-
-<label><b>1. Paste OLD HTML with &lt;frameset&gt;&lt;frame&gt;:</b></label>
-<textarea id="old"><html>
-<frameset rows="20%,80%">
-  <frame src="header.html" name="top">
-  <frame src="body.html" name="main">
-</frameset>
-</html></textarea>
-<button onclick="run()">▶ EVALUATE → Convert to iframe</button>
-
-<label><b>2. NEW HTML (iframe):</b></label>
-<textarea id="new" readonly style="color:#3fb950;border-color:#3fb950"></textarea>
-
-<b>3. Live Preview (what iframe.frame does):</b>
-<div id="preview" style="display:flex;gap:10px">
-<iframe id="f1" srcdoc="<div style='padding:20px'>header.html - top frame</div>"></iframe>
-<iframe id="f2" srcdoc="<div style='padding:20px'>body.html - main frame<br>Now inside modern iframe</div>"></iframe>
-</div>
-
 <div class="box">
-<b>Macro Logic - iframe.frame evaluation:</b>
-<pre>INPUT:  &lt;frame src="X"&gt;  (HTML 3.2 - deprecated 1999)
-        &lt;frameset cols="25%,75%"&gt;
-
-OUTPUT: &lt;div style="display:flex"&gt;
-          &lt;iframe src="X" style="flex:1"&gt;&lt;/iframe&gt;
-        &lt;/div&gt;
-
-JS ACCESS:
-  OLD: window.frames['main']  or  frame.iframe (WRONG)
-  NEW: document.getElementById('myIframe').contentWindow
-       or window.frames[0] or iframe.contentDocument
-
-EVAL: frame → iframe
-      frameset → div + flex
-      noresize, frameborder → CSS border:0
-</pre>
-<code id="log"></code>
+  <span class="ok">&#9679; LLMM HTML Macro</span> | Converts deprecated &lt;frame&gt; &rarr; modern &lt;iframe&gt; | Like R.go but for HTML
+  Org: enforced_repositories=all | SHA: <span id="sha">3ca39d44</span> | <a href="index.html">&larr; back to index.html</a>
 </div>
+
+<label for="in">1. Paste OLD HTML with &lt;frameset&gt;&lt;frame&gt;:</label>
+<textarea id="in" spellcheck="false">&lt;html&gt;
+&lt;frameset rows="20%,80%"&gt;
+  &lt;frame src="header.html" name="top"&gt;
+  &lt;frame src="body.html" name="main"&gt;
+&lt;/frameset&gt;
+&lt;/html&gt;</textarea>
+
+<div class="row">
+  <button id="go">&#9654; EVALUATE &rarr; Convert to iframe</button>
+  <button id="copy" class="alt">Copy</button>
+  <span id="status">ready</span>
+</div>
+
+<label for="out">2. NEW HTML (iframe):</label>
+<textarea id="out" spellcheck="false" readonly></textarea>
 
 <script>
-function run(){
-  const old = document.getElementById('old').value;
-  const srcs = [...old.matchAll(/<frame[^>]*src=["']([^"']+)["'][^>]*>/gi)].map(m=>m[1]);
-  const list = srcs.length ? srcs : ['header.html','body.html'];
-  let out = '<!-- iframe.frame macro output - 3ca39d44 -->
-<div style="display:flex;flex-direction:column;height:100vh">
-';
-  // detect rows vs cols
-  const isRows = /rows=/i.test(old);
-  out += `  <div style="display:flex;flex:1;flex-direction:${isRows?'column':'row'}">
-`;
-  list.forEach(s=>{
-    out += `    <iframe src="${s}" style="flex:1;border:1px solid #30363d" title="${s}" loading="lazy"></iframe>
-`;
-  });
-  out += '  </div>
-</div>';
-  document.getElementById('new').value = out;
-  
-  // update preview
-  document.getElementById('preview').innerHTML = list.map(s=>`<iframe srcdoc="<div style='font-family:monospace;padding:20px'><b>${s}</b><br>converted to iframe<br>src='${s}'<br><br>OK immutable: 3ca39d44</div>" style="flex:1"></iframe>`).join('');
-  
-  const log = `evaluated ${srcs.length} frame(s) → ${list.length} iframe(s) | ${new Date().toLocaleTimeString()} | enforced=true`;
-  document.getElementById('log').textContent = log;
-  console.log('iframe.frame', {input: srcs, output: list, macro: 'frame->iframe'});
+var $ = function (id) { return document.getElementById(id); };
+var dropped = false;
+
+function esc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 }
-run();
+
+// frameset sizes: "20%", "150", "*", "2*"  ->  CSS grid tracks
+function tracks(v) {
+  return v.split(',').map(function (t) {
+    t = t.trim();
+    if (t === '' || t === '*') return '1fr';
+    if (/^\d+\*$/.test(t)) return parseInt(t, 10) + 'fr';
+    if (/%$/.test(t)) return t;
+    if (/^\d+(\.\d+)?$/.test(t)) return t + 'px';
+    return '1fr';
+  }).join(' ');
+}
+
+function gridStyle(fs) {
+  var rows = fs.getAttribute('rows'), cols = fs.getAttribute('cols');
+  var s = 'display:grid;';
+  if (rows) s += 'grid-template-rows:' + tracks(rows) + ';'; else s += 'grid-auto-rows:1fr;';
+  if (cols) s += 'grid-template-columns:' + tracks(cols) + ';'; else s += 'grid-auto-columns:1fr;';
+  return s;
+}
+
+function convert(el, depth) {
+  var pad = new Array(depth + 1).join('  ');
+  var out = '';
+  Array.prototype.forEach.call(el.children, function (c) {
+    var tag = c.tagName.toLowerCase();
+    if (tag === 'frame') {
+      var a = '';
+      ['src', 'name', 'scrolling', 'title'].forEach(function (k) {
+        if (c.getAttribute(k)) a += ' ' + k + '="' + esc(c.getAttribute(k)) + '"';
+      });
+      out += pad + '<iframe' + a + ' style="border:0;width:100%;height:100%"></iframe>\n';
+    } else if (tag === 'frameset') {
+      out += pad + '<div style="' + gridStyle(c) + 'min-width:0;min-height:0">\n' +
+             convert(c, depth + 1) + pad + '</div>\n';
+    } else if (tag === 'noframes') {
+      dropped = true;
+    }
+  });
+  return out;
+}
+
+function evaluate() {
+  var src = $('in').value, html, note;
+  dropped = false;
+  var doc = new DOMParser().parseFromString(src, 'text/html');
+  var fs = doc.querySelector('frameset');
+  if (fs) {
+    var title = doc.title ? '  <title>' + doc.title.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</title>\n' : '';
+    html = '<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n' + title + '</head>\n' +
+           '<body style="margin:0;height:100vh;' + gridStyle(fs) + '">\n' +
+           convert(fs, 1) + '</body>\n</html>\n';
+    note = 'frameset converted to CSS grid';
+  } else {
+    html = src.replace(/<frame\b([^>]*?)\/?>/gi, function (m, a) {
+      return '<iframe' + a + ' style="border:0;width:100%;height:100%"></iframe>';
+    });
+    note = 'no <frameset> found, only <frame> tags swapped';
+  }
+  var n = (html.match(/<iframe/g) || []).length;
+  $('out').value = html;
+  $('status').textContent = n + ' iframe(s) - ' + note + (dropped ? ' - <noframes> dropped' : '');
+}
+
+function copyOut() {
+  var t = $('out');
+  t.select();
+  if (navigator.clipboard) navigator.clipboard.writeText(t.value).catch(function () { document.execCommand('copy'); });
+  else document.execCommand('copy');
+  $('status').textContent = 'copied';
+}
+
+$('go').addEventListener('click', evaluate);
+$('copy').addEventListener('click', copyOut);
+
+fetch('https://api.github.com/repos/Colegio-San-Caio/LLMM/commits/main')
+  .then(function (r) { return r.json(); })
+  .then(function (d) { if (d.sha) $('sha').textContent = d.sha.slice(0, 7); })
+  .catch(function () {});
 </script>
-</body></html>
+</body>
+</html>
