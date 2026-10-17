@@ -3,6 +3,13 @@
 <head>
   <meta charset="utf-8">
   <title>LLMM</title>
+<script>
+if (window.top !== window.self) {
+  window.stop();
+  document.write('<p style="font:12px monospace;color:#8b949e;background:#0d1117;margin:8px">nested index blocked (loop guard)</p>');
+  document.close();
+}
+</script>
 </head>
 <body style="margin:0;height:100vh;display:grid;grid-template-rows:20% 80%;grid-auto-columns:1fr;">
   <iframe src="catalog.html" name="top" style="border:0;width:100%;height:100%"></iframe>
