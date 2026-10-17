@@ -6,3 +6,5 @@ cover.log
 cover.out
 mq/
 ISSN
+push_gitlab.sh
+cover.pdf
