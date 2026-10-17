@@ -1,0 +1,29 @@
+name: PHP + Objective-C CI
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Lint PHP
+        run: for f in *.php; do php -l "$f"; done
+
+      - name: Build Objective-C
+        run: clang -fobjc-arc -framework Foundation LLM.m -o LLM
+
+      - name: Run LLM
+        run: ./LLM README.md 200
