@@ -74,4 +74,5 @@ count++
 }
 pi := math.Sqrt(6 * math.Exp(sum))
 fmt.Printf("primes up to %d: %d\npi ~ %.12f\nerror %.3e\n", n, count, pi, math.Abs(pi-math.Pi))
+    hexdiff(pi, math.Pi)
 }

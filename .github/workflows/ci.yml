@@ -23,7 +23,7 @@ jobs:
         run: for f in *.php; do php -l "$f"; done
 
       - name: Build Objective-C
-        run: clang -fobjc-arc -framework Foundation LLM.m -o LLM
+        run: clang -fobjc-arc -framework Foundation objc/LLM.m -o LLM
 
       - name: Run LLM
         run: ./LLM README.md 200
