@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LLMM - Master Frame Catalog</title>
+<style>
+body{margin:0;background:#0d1117;color:#c9d1d9;font-family:monospace;display:flex;flex-direction:column;height:100vh}
+header{padding:10px 16px;border-bottom:1px solid #30363d;background:#161b22}
+.frames{flex:1;display:grid;grid-template-rows:60px 1fr;gap:2px;background:#30363d}
+iframe{border:0;width:100%;height:100%;background:#fff}
+.topbar{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.badge{font-size:11px;border:1px solid #30363d;padding:2px 6px;border-radius:4px;background:#0d1117}
+.ok{color:#3fb950}
+a{color:#58a6ff}
+.main-grid{display:grid;grid-template-columns:1fr 1fr;height:100%;gap:2px}
+@media(max-width:700px){.main-grid{grid-template-columns:1fr}}
+</style></head><body>
+<header><div class="topbar">
+<div><span class="badge ok">● LIVE MAIN</span> <b>LLMM Master</b> - iframe.frame macro calling bodies via personal links</div>
+<div>
+<a href="https://colegio-san-caio.github.io/LLMM/iframe.frame.html">Colegio iframe.frame</a> | 
+<a href="https://clevjhon.github.io/LLMM/iframe.frame.html">clevjhon iframe.frame</a> | 
+<a href="https://colegio-san-caio.github.io/demo-repository/">demo-repository</a>
+</div>
+</div></header>
+
+<div class="frames">
+<!-- TOP frame = catalog header via personal link -->
+<iframe src="https://clevjhon.github.io/LLMM/" title="top catalog" id="top"></iframe>
+
+<div class="main-grid">
+<!-- MAIN frame 1 = iframe.frame evaluator -->
+<iframe src="https://clevjhon.github.io/LLMM/iframe.frame.html" title="iframe macro" id="main"></iframe>
+<!-- MAIN frame 2 = oeneyeOS lab body -->
+<iframe src="https://colegio-san-caio.github.io/demo-repository/index.html" title="oeneyeOS body" id="body"></iframe>
+</div>
+</div>
+
+<script>
+// auto fallback if personal link down -> colegio link
+document.querySelectorAll('iframe').forEach(f=>{
+ f.addEventListener('error',()=>{
+   if(f.src.includes('clevjhon')) f.src = f.src.replace('clevjhon.github.io','colegio-san-caio.github.io');
+ });
+});
+</script>
+</body></html>
