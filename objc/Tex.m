@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define AUTHOR "Kai Ketelhut"
+#define AUTHOR "Kai Olaf Ketelhut"
 #define ORG "Fieldberry Group"
 #define ORCID "0000-0001-6049-8873"
 #define ISSN "pending"
